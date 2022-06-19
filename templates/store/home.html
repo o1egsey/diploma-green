@@ -1,0 +1,49 @@
+{% extends "store/base.html" %}
+{% load static %}
+{% block title %}GreenStore{% endblock %}
+{% block content %}
+
+    <section class="py-5 text-center container">
+        <div class="row py-md-3.bg-image" style="background-image: url(https://images.unsplash.com/photo-1464036388609-747537735eab?ixlib=rb-1.2.1&raw_url=true&q=80&fm=jpg&crop=entropy&cs=tinysrgb&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470);">
+            <div class="col-lg-6 col-md-8 mx-auto">
+
+                <h1 class="h1 fw-bold">Сади, вирощуй, насолоджуйся</h1>
+                <p class="lead text-muted">Культурні дерева людина цінує за смакові і корисні властивості їх плодів
+                    і декоративні якості крони. Для отримання культурної форми з диких дерев вчені використовують
+                    селекцію, гібридизацію або генну інженерію. Все це ми вже зробили за Вас!</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="album py-5 bg-light">
+        <div class="container">
+
+            <div class="pb-3 h5">Популярні товари</div>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
+
+            {% for product in products %}
+
+            <div class="col">
+                <div class="card shadow-sm">
+                        {% for image in product.product_image.all %}
+                            {% if image.is_feature %}
+                                <img class="img-fluid" alt="Responsive image" src="{{ image.image.url }}">
+                            {% endif %}
+                        {% endfor %}
+                    <div class="card-body">
+                     <p class="card-text">
+                        <a class="text-dark text-decoration-none " href="{{ product.get_absolute_url }}">{{ product.title }}</a>
+                    </p>
+                        <hr>
+                        <p class="card-text"> {{ product.regular_price }} грн</p>
+                    <div class="d-flex justify-content-between align-items-center"></div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            </div>
+        </div>
+  </div>
+
+
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends "store/base.html" %}
+{% load static %}
+{% block title %}Basket Summary{% endblock %}
+
+{% block content %}
+    <style>
+            .checkoutform label {
+                font-size:16px !important;
+                font-weight:600;
+            }
+            .checkoutform input {
+                font-size:14px !important;
+            }
+
+        </style>
+    
+    <main class="pt-3">
+    <div class="container">
+        <form action="{% url 'checkout:placeorder' %}" method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h5 class="fw-bold">Платіжні дані</h5>
+                            <hr>
+                            <div class="row checkoutform">
+                                <div class="col-md-6">
+                                    <label>Ім'я</label>
+                                    <input type="text" required class="form-control" name="fname">
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Прізвище</label>
+                                    <input type="text" required class="form-control" name="lname">
+                                </div>
+                                <div class="col-md-6 mt-2">
+                                    <label>Адреса електронної пошти</label>
+                                    <input type="email" required class="form-control" name="email" placeholder="email@gmail.com">
+                                </div>
+                                <div class="col-md-6 mt-2">
+                                    <label>Телефон</label>
+                                    <input type="text" required class="form-control" name="phone" placeholder="+380 -- --- -- --">
+                                </div>
+                                <div class="col-md-12">
+                                    <br>
+                                    <h5 class="fw-bold">Доставка здійснюється Новою поштою</h5>
+                                    <hr>
+                                </div>
+                                <div class="col-md-6 mt-2">
+                                        <label>Місто</label>
+                                        <input id="cities" type="text" required name="city" class="form-control" placeholder="Почніть вводити назву">
+                                        <div id ="cityHint"></div>
+                                        <div class="invalid-feedback">
+                                            Оберіть місто
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <label>Відділення</label>
+                                        <select id="warehouses" name="warehouse" class="form-control" required></select>
+                                        <div class="invalid-feedback">
+                                            Please select a valid country.
+                                        </div>
+                                    </div>
+
+
+                                <div class="col-md-12 mt-2">
+                                    <input type="hidden" name="payment_option" value="COD">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h5 class="fw-bold">Ваше замовлення</h5>
+                            <hr>
+                            <table class="table table-stripeds table-bordereds">
+                                <thead>
+                                    <tr>
+                                        <th>Товар</th>
+                                        <th>Кількість</th>
+                                        <th>Сума</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in basket %}
+                                         {% with product=item.product %}
+                                        <tr>
+                                            <td>
+                                                {% for image in product.product_image.all %}
+                                                    {% if image.is_feature %}
+                                                        <img class="me-2" alt="Responsive image" src="{{ image.image.url }}" height="50px" width="50px">
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {{ product.title }}
+                                            </td>
+                                            <td>{{item.qty}}</td>
+                                            <td>{{ item.total_price }} грн</td>
+                                        </tr>
+                                        {% endwith %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <h6 class="fw-bold">До сплати
+                                <span class="float-end"> {{basket.get_subtotal_price}} грн </span>
+                            </h6>
+                            <hr>
+                            <h6 class="fw-bold">Оплата при отриманні</h6>
+                            <div class="mt-3">
+                            <button type="submit" class="btn btn-success w-100"> Сплатити </button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    </main>
+
+    <script src="/static/checkout/novaPoshta.js"></script>
+
+
+{% endblock %}

@@ -1,0 +1,148 @@
+{% extends "store/base.html" %}
+{% load static %}
+{% block title %}Basket Summary{%endblock %}
+{% block content %}
+
+    <div class="container">
+        <div class="col-12">
+            <h1 class="h2">Корзина</h1>
+        </div>
+        <hr />
+    </div>
+    <div class="container">
+        <div class="row">
+            {% if basket|length == 0 %}
+                <div class="col-12">Ваша корзина порожня <a href="{% url 'store:store_home' %}"> <br> Перейти в магазин</a></div>
+            {% else %}
+                <div class="col-md-7">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <table class="table table-stripeds table-bordereds">
+                                <div class="card mb-3 border-0 product-item" data-index="{{product.id}}">
+                                    <thead>
+                                    <tr>
+                                        <th>Товар</th>
+                                        <th>Кількість</th>
+                                        <th>Ціна</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for item in basket%}
+                                        {% with product=item.product %}
+                                            <tr>
+
+                                                <div>
+                                                    <td>
+                                                        {% for image in product.product_image.all %}
+                                                            {% if image.is_feature %}
+                                                                <img class="me-2" alt="Responsive image" src="{{ image.image.url }}" height="50px" width="50px">
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        {{ product.title }}
+                                                    </td>
+                                                    <td>
+                                                        <label for="select">Кіл-ть</label>
+                                                        <select id="select{{product.id}}">
+                                                            <option selected>
+                                                                {{item.qty}}
+                                                            </option>
+                                                            <option value="">1</option>
+                                                            <option value="">2</option>
+                                                            <option value="">3</option>
+                                                            <option value="">4</option>
+                                                            <option value="">5</option>
+                                                            <option value="">6</option>
+                                                        </select>
+                                                        <button type="button" id="update-button" data-index="{{product.id}}"
+                                                                class="btn btn-outline-secondary btn-sm update-button">
+                                                            Оновити
+                                                        </button>
+                                                        <button type="button" id="delete-button" data-index="{{product.id}}"
+                                                                class="btn btn-outline-secondary btn-sm delete-button">
+                                                            Видалити
+                                                        </button>
+                                                    </td>
+                                                    <td>{{ item.price }} грн</td>
+                                                </div>
+                                            </tr>
+                                        {% endwith %}
+                                    {% endfor %}
+                                    </tbody>
+                                </div>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <div class="col-12 bg-light">
+                                <h5>Ваше замовлення майже готове, перейдіть далі для оформлення</h5>
+                                <hr>
+                                <div class="text-end">
+                                    <div class="">До сплати: <span class="fw-bold"></span>
+                                        <div id="subtotal" class="d-inline-flex fw-bold">{{basket.get_subtotal_price}} грн</div>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="d-grid gap-2 ">
+                                    <a role="button" href="{% url 'checkout:checkout' %}" class="btn btn-success fw-bold" type="button">Оформити замовлення</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <script>
+        // Delete Item
+        $(document).on('click', '.delete-button', function (e) {
+            e.preventDefault();
+            var prodid = $(this).data('index');
+            $.ajax({
+                type: 'POST',
+                url: '{% url "basket:basket_delete" %}',
+                data: {
+                    productid: $(this).data('index'),
+                    csrfmiddlewaretoken: "{{csrf_token}}",
+                    action: 'post'
+                },
+                success: function (json) {
+                    $('.product-item[data-index="' + prodid + '"]').remove();
+                    document.getElementById("subtotal").innerHTML = json.subtotal;
+                    document.getElementById("basket-qty").innerHTML = json.qty
+                    document.location.reload()
+                },
+                error: function (xhr, errmsg, err) {}
+            });
+        })
+
+        // Update Item
+        $(document).on('click', '.update-button', function (e) {
+            e.preventDefault();
+            var prodid = $(this).data('index');
+            $.ajax({
+                type: 'POST',
+                url: '{% url "basket:basket_update" %}',
+                data: {
+                    productid: $(this).data('index'),
+                    productqty: $('#select' + prodid + ' option:selected').text(),
+                    csrfmiddlewaretoken: "{{csrf_token}}",
+                    action: 'post'
+                },
+                success: function (json) {
+                    document.getElementById("basket-qty").innerHTML = json.qty
+                    document.getElementById("subtotal").innerHTML = json.subtotal
+                },
+                error: function (xhr, errmsg, err) {}
+            });
+        })
+    </script>
+
+{% endblock %}
