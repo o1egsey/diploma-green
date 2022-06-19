@@ -1,0 +1,1 @@
+web gunicorn treeShop.wsgi:application --log-file -
