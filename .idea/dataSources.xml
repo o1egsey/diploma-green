@@ -20,5 +20,12 @@
       <jdbc-url>jdbc:postgresql://localhost:5433/greenspace</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="d5ds812g1sa8fn@ec2-54-228-218-84.eu-west-1.compute.amazonaws.com" uuid="f2641a4e-68f0-4565-b7fe-9ca0a6d2571f">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://ec2-54-228-218-84.eu-west-1.compute.amazonaws.com:5432/d5ds812g1sa8fn</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
