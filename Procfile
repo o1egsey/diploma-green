@@ -1,2 +1,2 @@
-release: pyhton manage.py migrate
+release: python manage.py migrate
 web: gunicorn treeShop.wsgi:application --log-file -
