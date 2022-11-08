@@ -12,7 +12,6 @@ urlpatterns = [
     path('account/', include('account.urls', namespace='account')),
     path('orders/', include('orders.urls', namespace='orders')),
     path('checkout/', include('checkout.urls', namespace='checkout')),
-    path('loaderio-34f424f22d6a6db5c7287532478f4b19/', views.loader)
 
 ]
 

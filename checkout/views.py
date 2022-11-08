@@ -1,19 +1,29 @@
-from basket.basket import Basket
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
 from django.shortcuts import render, redirect
+
+from basket.basket import Basket
 from orders.models import Order, OrderItem
 
 
 @login_required
 def checkout(request):
+    """
+
+    :param request:
+    :return:
+    """
     basket = Basket(request)
     return render(request, 'checkout/checkout.html', {'basket': basket})
 
 
 @login_required
 def placeorder(request):
+    """
+
+    :param request:
+    :return:
+    """
     basket = Basket(request)
     if request.method == 'POST':
         neworder = Order()
@@ -32,9 +42,12 @@ def placeorder(request):
         order_id = neworder.pk
 
         for item in basket:
-            OrderItem.objects.create(order_id=order_id, product=item["product"], price=item["price"], quantity=item["qty"])
+            OrderItem.objects.create(order_id=order_id,
+                                     product=item["product"],
+                                     price=item["price"],
+                                     quantity=item["qty"])
 
-        basket.clear()
+        basket.clear_session()
 
         messages.success(request, "Замовлення успішне, перейдіть в Кабінет, щоб переглянути деталі")
 

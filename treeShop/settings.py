@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 import django_heroku
 import dj_database_url
+import pswrds
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,16 +22,13 @@ INSTALLED_APPS = [
 
     'django_dump_load_utf8',
 
+    'treeShop',
     'store',
     'basket',
     'account',
     'orders',
     'mptt',
     'checkout',
-
-
-
-
 ]
 
 MIDDLEWARE = [
@@ -64,6 +62,25 @@ TEMPLATES = [
     },
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': [BASE_DIR / 'log.log'],
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+    },
+}
+
 WSGI_APPLICATION = 'treeShop.wsgi.application'
 
 DATABASES = {
@@ -71,22 +88,22 @@ DATABASES = {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'greenspace',
-    #     'USER': 'postgres',
-    #     'PASSWORD': '1488',
-    #     'HOST': 'localhost',
-    #     'PORT': '5433',
-    # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd5ds812g1sa8fn',
-        'USER': 'ldugthhvwokgjn',
-        'PASSWORD': 'a101769cbfca4dcea9ea3b3281f14480b0f88eac12045862d8d50067e83a24d8',
-        'HOST': 'ec2-54-228-218-84.eu-west-1.compute.amazonaws.com',
-        'PORT': '5432',
+        'NAME': 'greenspace',
+        'USER': 'postgres',
+        'PASSWORD': '1488',
+        'HOST': 'localhost',
+        'PORT': '5433',
     }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'd5ds812g1sa8fn',
+    #     'USER': 'ldugthhvwokgjn',
+    #     'PASSWORD': 'a101769cbfca4dcea9ea3b3281f14480b0f88eac12045862d8d50067e83a24d8',
+    #     'HOST': 'ec2-54-228-218-84.eu-west-1.compute.amazonaws.com',
+    #     'PORT': '5432',
+    # }
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -142,6 +159,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.ukr.net'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'greenspace1@ukr.net'
-EMAIL_HOST_PASSWORD = 'EW8ODeBijt2NkCF5'
+EMAIL_HOST_PASSWORD = pswrds.EMAIL_HOST_PASSWORD
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
