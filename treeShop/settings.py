@@ -159,6 +159,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.ukr.net'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'greenspace1@ukr.net'
-EMAIL_HOST_PASSWORD = pswrds.EMAIL_HOST_PASSWORD
+EMAIL_HOST_PASSWORD = 'c7zgEcW7FFUklqG7'
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
